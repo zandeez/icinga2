@@ -104,6 +104,7 @@ public:
 
 	virtual std::vector<String> GetLoadDependencies() const;
 	virtual int GetActivationPriority() const;
+	virtual int GetLoadPriority() const;
 
 	typedef std::function<void (const Object::Ptr&, const Value&)> AttributeHandler;
 	virtual void RegisterAttributeHandler(int fieldId, const AttributeHandler& callback);
