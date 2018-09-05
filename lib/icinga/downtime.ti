@@ -37,9 +37,6 @@ public:
 
 class Downtime : ConfigObject < DowntimeNameComposer
 {
-	load_after Host;
-	load_after Service;
-
 	[config, protected, required, navigation(host)] name(Host) host_name {
 		navigate {{{
 			return Host::GetByName(GetHostName());
