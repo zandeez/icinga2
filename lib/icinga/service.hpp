@@ -62,7 +62,7 @@ public:
 
 protected:
 	void OnAllConfigLoaded() override;
-	void CreateChildObjects(const Type::Ptr& childType) override;
+	void CreateAllChildObjects() override;
 
 private:
 	Host::Ptr m_Host;

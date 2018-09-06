@@ -443,7 +443,7 @@ void ConfigObject::OnAllConfigLoaded()
 		m_Zone = ctype->GetObject(zoneName);
 }
 
-void ConfigObject::CreateChildObjects(const Type::Ptr& childType)
+void ConfigObject::CreateAllChildObjects()
 {
 	/* Nothing to do here. */
 }
