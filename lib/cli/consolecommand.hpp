@@ -6,6 +6,7 @@
 #include "cli/clicommand.hpp"
 #include "base/exception.hpp"
 #include "base/scriptframe.hpp"
+#include <boost/thread/condition_variable.hpp>
 
 namespace icinga
 {
