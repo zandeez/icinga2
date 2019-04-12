@@ -71,6 +71,16 @@ Dictionary::Ptr DowntimeNameComposer::ParseName(const String& name) const
 	return result;
 }
 
+Downtime::Downtime()
+{
+	m_CheckableIsInDowntime.store(false);
+}
+
+Downtime::~Downtime()
+{
+	SetCheckableIsInDowntime(false);
+}
+
 void Downtime::OnAllConfigLoaded()
 {
 	ObjectImpl<Downtime>::OnAllConfigLoaded();
@@ -129,11 +139,17 @@ void Downtime::Start(bool runtimeCreated)
 			<< " Triggering downtime now.";
 		TriggerDowntime();
 	}
+
+	if (IsInEffect()) {
+		SetCheckableIsInDowntime(true);
+	}
 }
 
 void Downtime::Stop(bool runtimeRemoved)
 {
 	GetCheckable()->UnregisterDowntime(this);
+
+	SetCheckableIsInDowntime(false);
 
 	if (runtimeRemoved)
 		OnDowntimeRemoved(this);
@@ -310,6 +326,10 @@ void Downtime::RemoveDowntime(const String& id, bool cancelled, bool expired, co
 {
 	Downtime::Ptr downtime = Downtime::GetByName(id);
 
+	if (downtime) {
+		downtime->SetCheckableIsInDowntime(false);
+	}
+
 	if (!downtime || downtime->GetPackage() != "_api")
 		return;
 
@@ -354,6 +374,27 @@ bool Downtime::CanBeTriggered()
 	return true;
 }
 
+void Downtime::SetCheckableIsInDowntime(bool isInDowntime)
+{
+	if (m_CheckableIsInDowntime.exchange(isInDowntime)) {
+		if (!isInDowntime) {
+			auto checkable (GetCheckable());
+
+			if (checkable) {
+				checkable->DecrementDowntimeDepth();
+			}
+		}
+	} else {
+		if (isInDowntime) {
+			auto checkable (GetCheckable());
+
+			if (checkable) {
+				checkable->IncrementDowntimeDepth();
+			}
+		}
+	}
+}
+
 void Downtime::TriggerDowntime()
 {
 	if (!CanBeTriggered())
@@ -364,6 +405,8 @@ void Downtime::TriggerDowntime()
 
 	if (GetTriggerTime() == 0)
 		SetTriggerTime(Utility::GetTime());
+
+	SetCheckableIsInDowntime(true);
 
 	Array::Ptr triggers = GetTriggers();
 
