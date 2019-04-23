@@ -44,6 +44,12 @@ std::vector<Dependency::Ptr> Checkable::GetReverseDependencies() const
 
 bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency, int rstack) const
 {
+	std::set<Checkable::Ptr> visited;
+	return this->IsReachable(dt, failedDependency, rstack, visited);
+}
+
+bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency, int rstack, std::set<Checkable::Ptr> visited) const
+{
 	/* Anything greater than 256 causes recursion bus errors. */
 	int limit = 256;
 
@@ -55,8 +61,15 @@ bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency
 	}
 
 	for (const Checkable::Ptr& checkable : GetParents()) {
-		if (!checkable->IsReachable(dt, failedDependency, rstack + 1))
-			return false;
+		if (!visited->contains(checkable) {
+			visited->insert(checkable);
+			if (!checkable->IsReachable(dt, failedDependency, rstack + 1, visited))
+				return false;
+		}
+		else {
+			Log(LogWarning, "Checkable")
+			<< "Loop detected for checkable '" << GetName() << "': Dependency failed.";
+		}
 	}
 
 	/* implicit dependency on host if this is a service */
