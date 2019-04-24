@@ -61,7 +61,7 @@ bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency
 	}
 
 	for (const Checkable::Ptr& checkable : GetParents()) {
-		if (!visited->contains(checkable) {
+		if (!visited->count(checkable) {
 			visited->insert(checkable);
 			if (!checkable->IsReachable(dt, failedDependency, rstack + 1, visited))
 				return false;
