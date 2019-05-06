@@ -62,10 +62,10 @@ std::vector<Dependency::Ptr> Checkable::GetReverseDependencies() const
 bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency, int rstack) const
 {
 	std::set<Dependency::Ptr> visited;
-	return IsReachable(dt, *failedDependency, rstack, &visited);
+	return IsReachableInt(dt, *failedDependency, rstack, &visited);
 }
 
-bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency, int rstack, std::set<Dependency::Ptr> *visited) const
+bool Checkable::IsReachableInt(DependencyType dt, Dependency::Ptr *failedDependency, int rstack, std::set<Dependency::Ptr> *visited) const
 {
 	/* Anything greater than 256 causes recursion bus errors. */
     int limit = 256;
@@ -81,7 +81,7 @@ bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency
 		if (!visited->find(checkable))
 		{
 			visited->insert(checkable);
-		  if (!checkable->IsReachable(dt, failedDependency, rstack + 1))
+		  if (!checkable->IsReachableInt(dt, failedDependency, rstack + 1, visited))
 			  return false;
 		}
 		else

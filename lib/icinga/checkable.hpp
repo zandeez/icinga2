@@ -95,7 +95,6 @@ public:
 	void AddGroup(const String& name);
 
 	bool IsReachable(DependencyType dt = DependencyState, intrusive_ptr<Dependency> *failedDependency = nullptr, int rstack = 0) const;
-	bool IsReachable(DependencyType dt = DependencyState, intrusive_ptr<Dependency> *failedDependency = nullptr, int rstack = 0, std::set<Dependency::Ptr> visited) const;
 
 	AcknowledgementType GetAcknowledgement();
 
@@ -219,6 +218,8 @@ private:
 	/* Downtimes */
 	std::set<Downtime::Ptr> m_Downtimes;
 	mutable boost::mutex m_DowntimeMutex;
+
+	bool IsReachableInt(DependencyType dt = DependencyState, intrusive_ptr<Dependency> *failedDependency = nullptr, int rstack = 0, std::set<Dependency::Ptr> visited) const;
 
 	static void NotifyFixedDowntimeStart(const Downtime::Ptr& downtime);
 	static void NotifyFlexibleDowntimeStart(const Downtime::Ptr& downtime);
