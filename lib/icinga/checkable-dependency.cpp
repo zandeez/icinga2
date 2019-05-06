@@ -65,7 +65,7 @@ bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency
 	return Checkable::IsReachable(DependencyType dt, *failedDependency, rstack, &visited);
 }
 
-bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency, int rstack, std::set *visited) const
+bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency, int rstack, std::set<Dependency::Ptr> *visited) const
 {
 	/* Anything greater than 256 causes recursion bus errors. */
     int limit = 256;
