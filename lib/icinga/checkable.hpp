@@ -219,7 +219,7 @@ private:
 	std::set<Downtime::Ptr> m_Downtimes;
 	mutable boost::mutex m_DowntimeMutex;
 
-	bool IsReachableInt(DependencyType dt = DependencyState, intrusive_ptr<Dependency> *failedDependency = nullptr, int rstack = 0, std::set<intrusive_ptr<Dependency>> *visited) const;
+	bool IsReachableInt(DependencyType dt = DependencyState, intrusive_ptr<Dependency> *failedDependency = nullptr, int rstack = 0, std::set<intrusive_ptr<Dependency>> *visited = nullptr) const;
 
 	static void NotifyFixedDowntimeStart(const Downtime::Ptr& downtime);
 	static void NotifyFlexibleDowntimeStart(const Downtime::Ptr& downtime);
