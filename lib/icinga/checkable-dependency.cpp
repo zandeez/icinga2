@@ -86,7 +86,7 @@ bool Checkable::IsReachableInt(DependencyType dt, Dependency::Ptr *failedDepende
 		}
 		else
 		{
-			Log(LogWarning, "Checkable") << "Loop detected resolving dependencies for checkable '" << GetName() << "': Dependency failed.";
+			Log(LogWarning, "Checkable") << "Loop detected resolving dependencies for checkable '" << GetName() << "'. Previously seen checkable '" << checkable->GetName() << "': Dependency Failed.";
 		}
 	}
 
