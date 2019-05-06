@@ -62,7 +62,7 @@ std::vector<Dependency::Ptr> Checkable::GetReverseDependencies() const
 bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency, int rstack) const
 {
 	std::set<Dependency::Ptr> visited;
-	return IsReachable(DependencyType dt, *failedDependency, rstack, &visited);
+	return IsReachable(dt, *failedDependency, rstack, &visited);
 }
 
 bool Checkable::IsReachable(DependencyType dt, Dependency::Ptr *failedDependency, int rstack, std::set<Dependency::Ptr> *visited) const
